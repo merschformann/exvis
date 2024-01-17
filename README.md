@@ -11,7 +11,7 @@ pip install exvis
 ## Usage
 
 ```bash
-exvis --input 
+exvis --input data/example/enlight_hard.mps.gz
 ```
 
 For further options, see `exvis --help`.
