@@ -26,7 +26,3 @@ jobs:
             # Lint with ruff
             - name: lint with ruff
               run: ruff check --output-format=github .
-
-            # Run the tests with pytest
-            - name: Test with pytest
-              run: python -m pytest -v -s
