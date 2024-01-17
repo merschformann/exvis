@@ -1,0 +1,61 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling >= 1.13.0"]
+
+[project]
+authors = [
+    { email = "marius.merschformann@gmail.com", name = "Marius Merschformann" }
+]
+maintainers = [
+    { email = "marius.merschformann@gmail.com", name = "Marius Merschformann" }
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "networkx>=3.2.1",
+    "matplotlib>=3.8.2",
+]
+description = "exvis visualizes MIP instances based on their expressions (variables and constraints) as a graph."
+dynamic = [
+    "version",
+]
+keywords = [
+    "visualization",
+    "mixed-integer programming",
+    "mip",
+    "optimization",
+    "operations research",
+]
+license = { file = "LICENSE" }
+name = "exvis"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[project.urls]
+Homepage = "https://github.com/merschformann/exvis"
+Repository = "https://github.com/merschformann/exvis"
+
+[project.scripts]
+exvis = "exvis.visualize:main"
+
+[tool.ruff]
+target-version = "py312"
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+    "UP",  # pyupgrade
+]
+line-length = 120
+[tool.ruff.lint.mccabe]
+max-complexity = 15
+
+[tool.hatch.version]
+path = "exvis/__about__.py"
