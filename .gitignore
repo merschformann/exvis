@@ -164,3 +164,9 @@ cython_debug/
 
 # Ignore any images
 *.png
+
+# Ignore instances
+*.mps
+*.lp
+*.mps.gz
+*.lp.gz
