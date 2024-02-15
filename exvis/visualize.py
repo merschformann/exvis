@@ -6,11 +6,6 @@ import tarfile
 import matplotlib.pyplot as plt
 import networkx as nx
 
-ISSUE_MESSAGE = (
-    "If this is unexpected, check the file or open an issue with sample data at:\n"
-    + "https://github.com/merschformann/exvis/issues"
-)
-
 
 class Constraint:
     """
@@ -75,6 +70,24 @@ def is_variable(word: str) -> bool:
     return True
 
 
+ISSUE_MESSAGE = (
+    "If this is unexpected, check the file or open an issue with sample data at:\n"
+    + "https://github.com/merschformann/exvis/issues"
+)
+
+
+def warn_no_variables_or_constraints(model: Model, file_type: str) -> None:
+    """
+    Warn if no variables or constraints were found.
+    """
+    if len(model.variables) == 0 or len(model.constraints) == 0:
+        if len(model.variables) == 0:
+            print(f"Warning: No variables found in {file_type} file.")
+        if len(model.constraints) == 0:
+            print(f"Warning: No constraints found in {file_type} file.")
+        print(ISSUE_MESSAGE)
+
+
 def read_lp(file: str) -> Model:
     """
     Read a linear program from a file in LP format.
@@ -136,12 +149,7 @@ def read_lp(file: str) -> Model:
     f.close()
 
     # Warn if no variables or constraints were found
-    if len(model.variables) == 0 or len(model.constraints) == 0:
-        if len(model.variables) == 0:
-            print("Warning: No variables found in LP file.")
-        if len(model.constraints) == 0:
-            print("Warning: No constraints found in LP file.")
-        print(ISSUE_MESSAGE)
+    warn_no_variables_or_constraints(model, "LP")
 
     return model
 
@@ -197,12 +205,7 @@ def read_mps(file: str) -> Model:
         model.create_constraint_relation(row)
 
     # Warn if no variables or constraints were found
-    if len(model.variables) == 0 or len(model.constraints) == 0:
-        if len(model.variables) == 0:
-            print("Warning: No variables found in MPS file.")
-        if len(model.constraints) == 0:
-            print("Warning: No constraints found in MPS file.")
-        print(ISSUE_MESSAGE)
+    warn_no_variables_or_constraints(model, "MPS")
 
     return model
 
