@@ -70,6 +70,24 @@ def is_variable(word: str) -> bool:
     return True
 
 
+ISSUE_MESSAGE = (
+    "If this is unexpected, check the file or open an issue with sample data at:\n"
+    + "https://github.com/merschformann/exvis/issues"
+)
+
+
+def warn_no_variables_or_constraints(model: Model, file_type: str) -> None:
+    """
+    Warn if no variables or constraints were found.
+    """
+    if len(model.variables) == 0 or len(model.constraints) == 0:
+        if len(model.variables) == 0:
+            print(f"Warning: No variables found in {file_type} file.")
+        if len(model.constraints) == 0:
+            print(f"Warning: No constraints found in {file_type} file.")
+        print(ISSUE_MESSAGE)
+
+
 def read_lp(file: str) -> Model:
     """
     Read a linear program from a file in LP format.
@@ -130,6 +148,9 @@ def read_lp(file: str) -> Model:
     # Close file
     f.close()
 
+    # Warn if no variables or constraints were found
+    warn_no_variables_or_constraints(model, "LP")
+
     return model
 
 
@@ -178,9 +199,14 @@ def read_mps(file: str) -> Model:
     # Close file
     f.close()
 
+    # Create model
     model = Model()
     for row in rows.values():
         model.create_constraint_relation(row)
+
+    # Warn if no variables or constraints were found
+    warn_no_variables_or_constraints(model, "MPS")
+
     return model
 
 
@@ -260,6 +286,9 @@ def main():
     else:
         raise ValueError(f"Unrecognized file extension: {args.input}")
     print(f"Found {len(model.variables)} variables and {len(model.constraints)} constraints.")
+    if len(model.variables) == 0:
+        print("No graph to plot.")
+        return
 
     # Plot model
     print("Plotting graph...")
