@@ -6,6 +6,11 @@ import tarfile
 import matplotlib.pyplot as plt
 import networkx as nx
 
+ISSUE_MESSAGE = (
+    "If this is unexpected, check the file or open an issue with sample data at:\n"
+    + "https://github.com/merschformann/exvis/issues"
+)
+
 
 class Constraint:
     """
@@ -130,6 +135,14 @@ def read_lp(file: str) -> Model:
     # Close file
     f.close()
 
+    # Warn if no variables or constraints were found
+    if len(model.variables) == 0 or len(model.constraints) == 0:
+        if len(model.variables) == 0:
+            print("Warning: No variables found in LP file.")
+        if len(model.constraints) == 0:
+            print("Warning: No constraints found in LP file.")
+        print(ISSUE_MESSAGE)
+
     return model
 
 
@@ -178,9 +191,19 @@ def read_mps(file: str) -> Model:
     # Close file
     f.close()
 
+    # Create model
     model = Model()
     for row in rows.values():
         model.create_constraint_relation(row)
+
+    # Warn if no variables or constraints were found
+    if len(model.variables) == 0 or len(model.constraints) == 0:
+        if len(model.variables) == 0:
+            print("Warning: No variables found in MPS file.")
+        if len(model.constraints) == 0:
+            print("Warning: No constraints found in MPS file.")
+        print(ISSUE_MESSAGE)
+
     return model
 
 
@@ -260,6 +283,9 @@ def main():
     else:
         raise ValueError(f"Unrecognized file extension: {args.input}")
     print(f"Found {len(model.variables)} variables and {len(model.constraints)} constraints.")
+    if len(model.variables) == 0:
+        print("No graph to plot.")
+        return
 
     # Plot model
     print("Plotting graph...")
